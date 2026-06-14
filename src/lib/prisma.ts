@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
-import path from "path";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { Pool } from "pg";
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
@@ -10,10 +10,18 @@ if (typeof window === "undefined") {
   if (globalForPrisma.prisma) {
     prismaInstance = globalForPrisma.prisma;
   } else {
-    // Resolve absolute path to dev.db in the project root to match prisma.config.ts CLI path
-    const dbPath = path.join(process.cwd(), "dev.db");
-    const adapter = new PrismaBetterSqlite3({ url: dbPath });
+    const connectionString = process.env.DATABASE_URL;
+    if (!connectionString) {
+      throw new Error("DATABASE_URL environment variable is missing");
+    }
     
+    // 1. Create a pg connection pool
+    const pool = new Pool({ connectionString });
+    
+    // 2. Initialize the adapter
+    const adapter = new PrismaPg(pool);
+    
+    // 3. Instantiate the PrismaClient with the adapter
     prismaInstance = new PrismaClient({ adapter });
     
     if (process.env.NODE_ENV !== "production") {
@@ -21,7 +29,7 @@ if (typeof window === "undefined") {
     }
   }
 } else {
-  // Client side fallback (for build and safety checks)
+  // Client side fallback (for build and compile checks)
   prismaInstance = null as unknown as PrismaClient;
 }
 
