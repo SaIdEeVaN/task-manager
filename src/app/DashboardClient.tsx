@@ -250,8 +250,8 @@ export default function DashboardClient({ user }: { user: User }) {
             >
               <defs>
                 <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#6366f1" />
-                  <stop offset="100%" stopColor="#a855f7" />
+                  <stop offset="0%" stopColor="#2563eb" />
+                  <stop offset="100%" stopColor="#38bdf8" />
                 </linearGradient>
               </defs>
               <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
@@ -321,7 +321,7 @@ export default function DashboardClient({ user }: { user: User }) {
             <span className={styles.statVal}>{tasks.length}</span>
           </div>
           <div className={styles.statCard}>
-            <span className={styles.statLabel} style={{ color: "#3b82f6" }}>To Do</span>
+            <span className={styles.statLabel} style={{ color: "#0ea5e9" }}>To Do</span>
             <span className={styles.statVal}>{todoCount}</span>
           </div>
           <div className={styles.statCard}>
